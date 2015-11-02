@@ -1,6 +1,6 @@
 class Employee
 
-  attr_accessor :name, :title, :salary, :boss
+  attr_accessor :name, :title, :salary, :boss, :sub_employees
 
   def initialize(name, title, salary, boss = nil)
     @name = name
@@ -24,13 +24,27 @@ class Manager < Employee
   end
 
   def bonus(multiplier)
-    bonus =
+    total_sum = 0
+
+    sub_employees.each do |sub_employee|
+      total_sum += sub_employee.salary
+    end
+
+    bonus = total_sum * multiplier
+  end
 
 
 end
 
 
-ned = Employee.new(Ned, Founder, 1000000)
-darren = Manager.new(Darren, TA Manager, 78000, Ned)
-shawna = Employee.new(Shawna, TA, 12000, Darren)
-david = Employee.new(David, TA, 10000, Darren)
+shawna = Employee.new(:shawna, :TA, 12000, :Darren)
+david = Employee.new(:David, :TA, 10000, :Darren)
+darren = Manager.new(:Darren, :ta_manager, 78000, :Ned, [shawna, david])
+ned = Manager.new(:Ned, :Founder, 1000000, nil, [shawna, david, darren])
+
+
+
+
+puts ned.bonus(5) # => 500_000
+puts darren.bonus(4) # => 88_000
+puts david.bonus(3) # => 30_000
