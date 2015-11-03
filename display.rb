@@ -42,6 +42,7 @@ class Display
   end
 end
 
-# board = Board.new
-# test = Display.new(board)
-# test.render
+whatever = Board.new
+hi = Display.new(whatever)
+hi.render
+hi.get_input

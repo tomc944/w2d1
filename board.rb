@@ -1,6 +1,6 @@
 require_relative 'pieces'
-require_relative 'cursorable'
-require_relative 'display'
+# require_relative 'cursorable'
+# require_relative 'display'
 require 'byebug'
 
 class Board
@@ -65,7 +65,9 @@ class Board
 
     return false unless x_end.between?(0, 7) && y_end.between?(0, 7)
 
-    if grid[x_end][y_end] == NullPiece
+    # debugger
+
+    if grid[x_end][y_end].class == NullPiece
       return true
     elsif grid[x_start][y_start].color == grid[x_end][y_end].color
       return false
