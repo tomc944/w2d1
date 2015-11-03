@@ -1,4 +1,6 @@
-require_relative 'pieces.rb'
+require_relative 'pieces'
+require_relative 'cursorable'
+require_relative 'display'
 require 'byebug'
 
 class Board
@@ -15,56 +17,40 @@ class Board
     while row < 8
       col.each do |col|
         if row < 2
-          grid[row][col] = Piece.new("white", [row,col], :D)
+          grid[row][col] = Piece.new("white", [row,col], :W)
         elsif 5 < row && row < 8
-          grid[row][col] = Piece.new("black", [row, col], :D)
+          grid[row][col] = Piece.new("black", [row, col], :B)
         else
-          grid[row][col] = nil
+          grid[row][col] = NullPiece.new
         end
       end
       row += 1
     end
   end
 
-  def display
-    grid.each do |row|
-      row.each do |square|
-        if square.nil?
-          print "-"
-        else
-          print square.symbol
-        end
-      end
-      puts "\n"
-    end
-  end
-
   def move(start, end_pos)
-    # if neither errors are raised
-      #starting poisiton becomes nil
-    # ending position becomes Piece
+    begin
 
-    debugger
     x_start, y_start = start
     x_end, y_end = end_pos
-    begin
+
       raise Empty_error if grid[x_start][y_start].nil?
 
       raise Valid_error unless valid_move?(start, end_pos)
 
       rescue Empty_error
-        puts "New Starting Position:"
+        puts "Enter new starting position: x, y"
         start = correct_format
 
       rescue Valid_error
-        puts "New End Postion"
+        puts "Enter new end postion: x, y"
         end_pos = correct_format
 
       retry
     end
 
     grid[x_end][y_end] = grid[x_start][y_start]
-    grid[x_start][y_start] = nil
+    grid[x_start][y_start] = NullPiece.new
 
 
   end
@@ -79,7 +65,7 @@ class Board
 
     return false unless x_end.between?(0, 7) && y_end.between?(0, 7)
 
-    if grid[x_end][y_end].nil?
+    if grid[x_end][y_end] == NullPiece
       return true
     elsif grid[x_start][y_start].color == grid[x_end][y_end].color
       return false
@@ -97,6 +83,11 @@ class Board
     x, y = position
     grid[x][y]
   end
+
+  def rows
+    @grid
+  end
+
 end
 
 class Empty_error < RuntimeError
@@ -104,6 +95,6 @@ end
 class Valid_error < RuntimeError
 end
 
-board = Board.new
-board.move([0,0], [2,2])
-board.display
+# board = Board.new
+# board.move([0,0], [1,1])
+# board.display
