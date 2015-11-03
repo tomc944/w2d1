@@ -1,4 +1,5 @@
 require "io/console"
+require "byebug"
 
 module Cursorable
   KEYMAP = {
@@ -32,8 +33,10 @@ module Cursorable
   }
 
   def get_input
+    # debugger
     key = KEYMAP[read_char]
     handle_key(key)
+    
   end
 
   def handle_key(key)
@@ -41,6 +44,7 @@ module Cursorable
     when :ctrl_c
       exit 0
     when :return, :space
+      @selected = true
       @cursor_pos
     when :left, :right, :up, :down
       update_pos(MOVES[key])
@@ -68,6 +72,6 @@ module Cursorable
 
   def update_pos(diff)
     new_pos = [@cursor_pos[0] + diff[0], @cursor_pos[1] + diff[1]]
-    @cursor_pos = new_pos if @board.valid_move?(@cursor_pos, new_pos)
+    @cursor_pos = new_pos if @board.in_bounds?(new_pos)
   end
 end

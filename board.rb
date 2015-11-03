@@ -1,6 +1,6 @@
 require_relative 'pieces'
 # require_relative 'cursorable'
-# require_relative 'display'
+require_relative 'display'
 require 'byebug'
 
 class Board
@@ -17,9 +17,9 @@ class Board
     while row < 8
       col.each do |col|
         if row < 2
-          grid[row][col] = Piece.new("white", [row,col], :W)
+          grid[row][col] = Piece.new("white", [row, col], :W, self)
         elsif 5 < row && row < 8
-          grid[row][col] = Piece.new("black", [row, col], :B)
+          grid[row][col] = Piece.new("black", [row, col], :B, self)
         else
           grid[row][col] = NullPiece.new
         end
@@ -29,34 +29,18 @@ class Board
   end
 
   def move(start, end_pos)
-    begin
 
     x_start, y_start = start
     x_end, y_end = end_pos
 
-      raise Empty_error if grid[x_start][y_start].nil?
+    raise Empty_error if grid[x_start][y_start].class == NullPiece
 
-      raise Valid_error unless valid_move?(start, end_pos)
-
-      rescue Empty_error
-        puts "Enter new starting position: x, y"
-        start = correct_format
-
-      rescue Valid_error
-        puts "Enter new end postion: x, y"
-        end_pos = correct_format
-
-      retry
-    end
+    raise Valid_error unless valid_move?(start, end_pos)
 
     grid[x_end][y_end] = grid[x_start][y_start]
     grid[x_start][y_start] = NullPiece.new
 
 
-  end
-
-  def correct_format
-    gets.strip.split(",").map { |el| el.to_i }
   end
 
   def valid_move?(start, end_pos)
@@ -76,6 +60,10 @@ class Board
     true
   end
 
+  def in_bounds?(pos)
+    pos.all? { |x| x.between?(0, 7) }
+  end
+
   def []=(position, value)
     x, y = position
     grid[x][y] = value
@@ -88,6 +76,11 @@ class Board
 
   def rows
     @grid
+  end
+
+  def won?
+    #STILL NEEDS TO BE FILLED IN
+    false
   end
 
 end
