@@ -31,7 +31,7 @@ class Display
     else
       bg = :black
     end
-    { background: bg, color: :red }
+    { background: bg, color: :blue }
   end
 
   def render

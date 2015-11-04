@@ -1,20 +1,25 @@
+# require 'pieces'
+
 class SlidingPiece < Piece
   NON_DIAG_MOVES = [[1, 0], [0, 1], [-1, 0], [0, -1]]
   DIAG_MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1]]
   attr_reader :possible_moves
 
-  def initialize
+  def initialize(color, position, symbol, board)
     @possible_moves = []
   end
 
   def moves(type_move)
     type_move.each do |move|
-      (0..7).each do |multiplier|
+      (1..7).each do |multiplier|
         move = move.map { |el| el * multiplier }
         new_pos = move + @position
-        if @board.in_bounds?(new_pos) && @board.valid_move?(@position, new_pos)
-          @possible_moves << move
-        else
+        if self.color == @board[new_pos].color
+          break
+        elsif @board[new_pos].color.nil?
+          @possible_moves << new_pos
+        elsif self.color != @board[new_pos].color
+          @possible_moves << new_pos
           break
         end
       end

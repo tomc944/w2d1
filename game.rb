@@ -30,12 +30,13 @@ class Game
         puts "Enter new end postion: x, y"
         retry
       end
-      
+
     end
     puts "Hooray, the board is filled!"
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
+
   Game.new.run
 end
