@@ -57,8 +57,10 @@ class Board
 
     raise Valid_error unless valid_move?(start, end_pos)
 
-    self[end_pos] = self[start_pos]
-    self[start_pos] = NullPiece.new
+    self[end_pos] = self[start]
+    self[end_pos].position = end_pos
+    self[start] = NullPiece.new
+    debugger
 
 
   end
@@ -73,6 +75,7 @@ class Board
     #REMEMBER TO CHECK IF START IS EMPTY
     #CHECK IF START AND END COLORS THE SAME (RETURN FALSE)
     self[start].move_dirs.include?(end_pos)
+    # debugger
 
   end
 
@@ -109,4 +112,6 @@ end
 
 board = Board.new
 board.grid[0][0] = Bishop.new("White", [0, 0], "D", board)
-p board.grid
+board.grid.each {|x| p x}
+board.grid[1][1] = Bishop.new("Black", [1, 1], "S", board)
+board.move([0,0],[1,1])
